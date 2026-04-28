@@ -1,355 +1,383 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Ugochukwu!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy-deep:   #050d1f;
+    --navy-mid:    #0a1a3a;
+    --navy-light:  #122050;
+    --gold:        #c9a96e;
+    --gold-light:  #e8c98a;
+    --cream:       #f0eaff;
+    --cream-dim:   rgba(240,234,255,0.55);
+    --accent:      #7ba7d4;
+  }
 
-  #bday-app {
-    min-height: 520px;
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: var(--navy-deep);
+    font-family: 'Jost', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    font-family: 'Jost', sans-serif;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #1a0a2e 0%, #2d1045 50%, #1a0a2e 100%);
-    border-radius: 20px;
-    padding: 40px 20px;
+    min-height: 100vh;
+    padding: 20px;
   }
 
-  #canvas-confetti {
+  /* ── background ── */
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 30% 20%, #0d2a5e 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, #071435 0%, transparent 50%),
+                var(--navy-deep);
+    overflow: hidden;
+  }
+
+  .star {
     position: absolute;
-    top: 0; left: 0;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50%       { opacity: 0.85; transform: scale(1.4); }
+  }
+
+  /* ── canvas ── */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
     width: 100%; height: 100%;
     pointer-events: none;
+    z-index: 50;
+  }
+
+  /* ── main card ── */
+  #app {
+    position: relative;
     z-index: 10;
-  }
-
-  /* PHASE 1: teaser */
-  #phase-teaser {
+    width: 100%;
+    max-width: 480px;
     text-align: center;
-    z-index: 2;
   }
 
-  #phase-teaser .hint {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    letter-spacing: 4px;
+  /* ── PHASE 1 ── */
+  #phase-teaser { transition: opacity 0.4s; }
+
+  .eyebrow {
+    font-size: clamp(9px, 2.5vw, 11px);
+    letter-spacing: 5px;
     text-transform: uppercase;
-    color: #c9a96e;
-    margin-bottom: 32px;
-    opacity: 0.8;
+    color: var(--gold);
+    opacity: 0.75;
+    margin-bottom: clamp(18px, 5vw, 28px);
   }
 
-  #phase-teaser h1 {
+  .teaser-headline {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
+    font-size: clamp(30px, 8vw, 46px);
     font-weight: 400;
-    color: #f5e6ff;
+    color: var(--cream);
     line-height: 1.2;
     margin-bottom: 8px;
-    letter-spacing: 1px;
   }
 
-  #phase-teaser h1 em {
+  .teaser-headline em {
     font-style: italic;
-    color: #c9a96e;
+    color: var(--gold);
   }
 
-  #phase-teaser .subtext {
-    font-size: 13px;
-    color: rgba(245,230,255,0.45);
-    margin-bottom: 48px;
+  .teaser-sub {
+    font-size: clamp(11px, 3vw, 13px);
+    color: var(--cream-dim);
     letter-spacing: 1px;
+    margin-bottom: clamp(36px, 10vw, 56px);
   }
 
-  /* RUNAWAY BUTTON */
-  #run-btn {
+  /* ── runaway button ── */
+  #btn-wrap {
     position: relative;
-    display: inline-block;
-    padding: 14px 40px;
+    height: clamp(180px, 40vw, 240px);
+    width: 100%;
+  }
+
+  #run-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: clamp(12px, 3vw, 15px) clamp(28px, 8vw, 44px);
     font-family: 'Jost', sans-serif;
-    font-size: 13px;
+    font-size: clamp(10px, 2.8vw, 13px);
     font-weight: 400;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #1a0a2e;
-    background: #c9a96e;
+    color: var(--navy-deep);
+    background: var(--gold);
     border: none;
     border-radius: 2px;
     cursor: pointer;
-    transition: transform 0.08s ease;
+    white-space: nowrap;
+    transition: left 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                top  0.3s cubic-bezier(0.34,1.56,0.64,1),
+                background 0.2s;
     z-index: 5;
   }
 
-  #run-btn:hover {
-    transform: scale(1.02);
-  }
+  #run-btn:hover { background: var(--gold-light); }
 
   #catch-msg {
-    margin-top: 16px;
-    font-size: 11px;
+    font-size: clamp(9px, 2.5vw, 11px);
     letter-spacing: 2px;
     color: rgba(201,169,110,0.5);
-    height: 16px;
-    transition: opacity 0.3s;
     text-transform: uppercase;
+    height: 16px;
+    margin-top: 8px;
   }
 
-  /* PHASE 2: birthday reveal */
+  /* ── PHASE 2 ── */
   #phase-reveal {
     display: none;
-    text-align: center;
-    z-index: 2;
     animation: fadeUp 1.2s ease forwards;
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  #phase-reveal .label {
-    font-size: 11px;
+  .reveal-label {
+    font-size: clamp(9px, 2.5vw, 11px);
     letter-spacing: 5px;
     text-transform: uppercase;
-    color: #c9a96e;
-    margin-bottom: 24px;
-    opacity: 0.8;
+    color: var(--gold);
+    opacity: 0.75;
+    margin-bottom: clamp(20px, 5vw, 30px);
   }
 
-  #phase-reveal .big-hbd {
+  .hbd-line {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(38px, 8vw, 64px);
     font-weight: 400;
-    color: #f5e6ff;
+    color: var(--cream);
     line-height: 1.1;
-    margin-bottom: 6px;
-    letter-spacing: 2px;
   }
 
-  #phase-reveal .big-hbd em {
-    font-style: italic;
-    color: #c9a96e;
+  .hbd-happy {
+    font-size: clamp(36px, 10vw, 58px);
     display: block;
-    font-size: 0.9em;
   }
 
-  #phase-reveal .name {
+  .hbd-birthday {
+    font-style: italic;
+    color: var(--gold);
+    font-size: clamp(32px, 9vw, 52px);
+    display: block;
+    margin-bottom: clamp(10px, 3vw, 18px);
+  }
+
+  .reveal-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(28px, 6vw, 48px);
+    font-size: clamp(18px, 5.5vw, 32px);
     font-weight: 500;
-    color: #f5e6ff;
-    letter-spacing: 3px;
-    margin-bottom: 24px;
+    color: var(--cream);
+    letter-spacing: clamp(2px, 1vw, 4px);
     text-transform: uppercase;
+    margin-bottom: clamp(20px, 5vw, 32px);
   }
 
-  #phase-reveal .divider {
-    width: 60px;
+  .divider {
+    width: 50px;
     height: 1px;
-    background: #c9a96e;
-    margin: 0 auto 24px;
-    opacity: 0.6;
+    background: var(--gold);
+    opacity: 0.5;
+    margin: 0 auto clamp(18px, 5vw, 28px);
   }
 
-  #phase-reveal .message {
+  .reveal-msg {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 18px;
-    color: rgba(245,230,255,0.7);
-    line-height: 1.7;
-    max-width: 360px;
-    margin: 0 auto 32px;
+    font-size: clamp(15px, 4.5vw, 19px);
+    color: var(--cream-dim);
+    line-height: 1.75;
+    max-width: 340px;
+    margin: 0 auto clamp(28px, 7vw, 40px);
+    padding: 0 10px;
   }
 
-  #phase-reveal .orbs {
+  .orbs {
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin-top: 8px;
   }
 
   .orb {
-    width: 8px; height: 8px;
+    width: 7px; height: 7px;
     border-radius: 50%;
-    background: #c9a96e;
+    background: var(--gold);
     opacity: 0.4;
     animation: pulse 2s ease-in-out infinite;
   }
-
-  .orb:nth-child(2) { animation-delay: 0.3s; background: #d4a0f0; }
+  .orb:nth-child(2) { animation-delay: 0.3s; background: var(--accent); }
   .orb:nth-child(3) { animation-delay: 0.6s; }
 
   @keyframes pulse {
     0%, 100% { transform: scale(1); opacity: 0.4; }
-    50% { transform: scale(1.5); opacity: 0.8; }
-  }
-
-  /* floating stars bg */
-  .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.5);
-    animation: twinkle 3s ease-in-out infinite;
-  }
-
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.9; }
+    50%       { transform: scale(1.6); opacity: 0.9; }
   }
 </style>
+</head>
+<body>
 
-<div id="bday-app">
-  <canvas id="canvas-confetti"></canvas>
+<div id="bg"></div>
+<canvas id="confetti-canvas"></canvas>
 
-  <!-- bg stars -->
-  <div id="stars-bg"></div>
+<div id="app">
 
   <!-- PHASE 1 -->
   <div id="phase-teaser">
-    <p class="hint">a little something awaits</p>
-    <h1>Something <em>wonderful</em><br>is waiting for you</h1>
-    <p class="subtext">if you dare to click the button</p>
-    <button id="run-btn" onclick="tryClick()">Reveal the magic</button>
+    <p class="eyebrow">a little something awaits</p>
+    <h1 class="teaser-headline">Something <em>wonderful</em><br>is waiting for you</h1>
+    <p class="teaser-sub">if you dare to catch the button</p>
+    <div id="btn-wrap">
+      <button id="run-btn">Reveal the magic</button>
+    </div>
     <p id="catch-msg"></p>
   </div>
 
   <!-- PHASE 2 -->
   <div id="phase-reveal">
-    <p class="label">today is a special day</p>
-    <div class="big-hbd">Happy <em>Birthday</em></div>
-    <div class="name">Ugochukwu Okafor</div>
+    <p class="reveal-label">today is a very special day</p>
+    <span class="hbd-line hbd-happy">Happy</span>
+    <span class="hbd-line hbd-birthday">Birthday</span>
+    <p class="reveal-name">Ugochukwu Okafor</p>
     <div class="divider"></div>
-    <p class="message">May this day and every day that follows be filled with everything that makes your heart full.</p>
+    <p class="reveal-msg">May this day and every day that follows be filled with everything that makes your heart full.</p>
+    <p class="reveal-msg">I also want you to know that if you ever want to talk i am here, for as long as youd have me</p>
     <div class="orbs">
       <div class="orb"></div>
       <div class="orb"></div>
       <div class="orb"></div>
     </div>
   </div>
+
 </div>
 
 <script>
-(function() {
-  const btn = document.getElementById('run-btn');
-  const msg = document.getElementById('catch-msg');
-  const app = document.getElementById('bday-app');
-
-  let attempts = 0;
-  let revealed = false;
-
-  const msgs = [
-    'nice try...',
-    'not so fast!',
-    'almost got it...',
-    'you\'re quick!',
-    'one more try...',
-    'okay... ready?'
-  ];
-
-  // generate stars
-  const starsBg = document.getElementById('stars-bg');
-  for (let i = 0; i < 30; i++) {
+(function () {
+  /* ── stars ── */
+  const bg = document.getElementById('bg');
+  for (let i = 0; i < 55; i++) {
     const s = document.createElement('div');
     s.className = 'star';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = (Math.random() * 3) + 's';
-    s.style.animationDuration = (2 + Math.random() * 2) + 's';
-    app.appendChild(s);
+    const sz = 1 + Math.random() * 2;
+    s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;--del:${Math.random()*4}s`;
+    bg.appendChild(s);
   }
 
-  window.tryClick = function() {
+  /* ── runaway button ── */
+  const btn   = document.getElementById('run-btn');
+  const wrap  = document.getElementById('btn-wrap');
+  const msg   = document.getElementById('catch-msg');
+  const msgs  = ['nice try…','not so fast!','almost got it…','you\'re quick!','one more try…','okay… ready?'];
+  let attempts = 0, revealed = false;
+
+  function flee() {
     if (revealed) return;
-    attempts++;
+    const wRect = wrap.getBoundingClientRect();
+    const bW = btn.offsetWidth, bH = btn.offsetHeight;
+    const maxX = wRect.width  - bW;
+    const maxY = wRect.height - bH;
+    const nx = Math.random() * maxX;
+    const ny = Math.random() * maxY;
+    btn.style.left = nx + 'px';
+    btn.style.top  = ny + 'px';
+    btn.style.transform = 'none';
+  }
 
-    if (attempts >= 6) {
-      reveal();
-      return;
-    }
-
-    msg.textContent = msgs[attempts - 1];
-
-    const appRect = app.getBoundingClientRect();
-    const btnRect = btn.getBoundingClientRect();
-
-    const maxX = appRect.width - btnRect.width - 20;
-    const maxY = appRect.height - btnRect.height - 20;
-
-    const randX = Math.floor(Math.random() * maxX);
-    const randY = Math.floor(Math.random() * maxY);
-
-    btn.style.position = 'absolute';
-    btn.style.left = randX + 'px';
-    btn.style.top = randY + 'px';
-    btn.style.transition = 'left 0.3s cubic-bezier(0.34,1.56,0.64,1), top 0.3s cubic-bezier(0.34,1.56,0.64,1)';
-  };
-
-  // mouseover flee
-  btn.addEventListener('mousemove', function(e) {
+  btn.addEventListener('mousemove', function () {
     if (revealed || attempts >= 5) return;
-    const appRect = app.getBoundingClientRect();
-    const btnRect = btn.getBoundingClientRect();
-    const maxX = appRect.width - btnRect.width - 20;
-    const maxY = appRect.height - btnRect.height - 20;
-    const randX = Math.floor(Math.random() * maxX);
-    const randY = Math.floor(Math.random() * maxY);
-    btn.style.position = 'absolute';
-    btn.style.left = randX + 'px';
-    btn.style.top = randY + 'px';
-    btn.style.transition = 'left 0.25s ease, top 0.25s ease';
-    if (attempts < msgs.length) {
-      msg.textContent = msgs[attempts] || 'almost!';
-    }
+    flee();
+    msg.textContent = msgs[Math.min(attempts, msgs.length - 1)];
   });
 
+  /* touch flee for mobile */
+  btn.addEventListener('touchstart', function (e) {
+    if (revealed) return;
+    e.preventDefault();
+    attempts++;
+    if (attempts >= 6) { reveal(); return; }
+    flee();
+    msg.textContent = msgs[attempts - 1] || '';
+  }, { passive: false });
+
+  btn.addEventListener('click', function () {
+    if (revealed) return;
+    attempts++;
+    if (attempts >= 6) { reveal(); return; }
+    flee();
+    msg.textContent = msgs[attempts - 1] || '';
+  });
+
+  /* ── reveal ── */
   function reveal() {
     revealed = true;
-    document.getElementById('phase-teaser').style.display = 'none';
-    const rev = document.getElementById('phase-reveal');
-    rev.style.display = 'block';
+    document.getElementById('phase-teaser').style.opacity = '0';
+    setTimeout(function () {
+      document.getElementById('phase-teaser').style.display = 'none';
+      const r = document.getElementById('phase-reveal');
+      r.style.display = 'block';
+    }, 400);
     launchConfetti();
-    setTimeout(launchConfetti, 1200);
-    setTimeout(launchConfetti, 2500);
+    setTimeout(launchConfetti, 1300);
+    setTimeout(launchConfetti, 2600);
   }
 
+  /* ── confetti ── */
   function launchConfetti() {
-    const canvas = document.getElementById('canvas-confetti');
-    const ctx = canvas.getContext('2d');
-    canvas.width = app.offsetWidth;
-    canvas.height = app.offsetHeight;
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    const colors = ['#c9a96e','#d4a0f0','#f5e6ff','#9b59b6','#f0c040','#e8a0bf'];
-    const pieces = [];
-
-    for (let i = 0; i < 80; i++) {
-      pieces.push({
+    const colors = ['#c9a96e','#7ba7d4','#f0eaff','#4a7fbf','#e8c98a','#a8d0f0'];
+    const pieces = Array.from({ length: 90 }, function () {
+      return {
         x: Math.random() * canvas.width,
-        y: -10 - Math.random() * 100,
+        y: -20 - Math.random() * 120,
         w: 5 + Math.random() * 8,
         h: 3 + Math.random() * 5,
         color: colors[Math.floor(Math.random() * colors.length)],
         vx: (Math.random() - 0.5) * 3,
-        vy: 2 + Math.random() * 3,
+        vy: 2.5 + Math.random() * 3,
         rot: Math.random() * Math.PI * 2,
         vr: (Math.random() - 0.5) * 0.15,
         alpha: 1
-      });
-    }
+      };
+    });
 
-    let frame;
-    function draw() {
+    (function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       let alive = false;
-      pieces.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vr;
-        if (p.y > canvas.height * 0.7) p.alpha -= 0.025;
+      pieces.forEach(function (p) {
+        p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+        if (p.y > canvas.height * 0.72) p.alpha -= 0.022;
         if (p.alpha > 0) {
           alive = true;
           ctx.save();
@@ -357,14 +385,21 @@
           ctx.translate(p.x, p.y);
           ctx.rotate(p.rot);
           ctx.fillStyle = p.color;
-          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
           ctx.restore();
         }
       });
-      if (alive) frame = requestAnimationFrame(draw);
+      if (alive) requestAnimationFrame(draw);
       else ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    draw();
+    })();
   }
+
+  window.addEventListener('resize', function () {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
 })();
 </script>
+</body>
+</html>
